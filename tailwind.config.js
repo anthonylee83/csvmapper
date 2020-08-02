@@ -1,8 +1,13 @@
 module.exports = {
-  purge: [],
-  theme: {
-    extend: {},
-  },
-  variants: {},
-  plugins: [],
+    theme: {
+        extend: {
+            fontFamily: {
+                roboto: ['Roboto'],
+            },
+        },
+    },
+    variants: {},
+    plugins: [
+        //require('@tailwindcss/custom-forms'),
+    ],
 }
