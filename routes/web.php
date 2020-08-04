@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', 'HomeController@index');
-
+Route::get('/contacts/import', 'ImportContactsController@index');
+Route::post('/contacts/import/prepare', 'PrepareContactsImportController@post');
+Route::post('/contacts/import', 'ImportContactsController@post');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

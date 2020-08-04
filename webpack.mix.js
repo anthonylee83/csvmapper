@@ -1,5 +1,6 @@
-const mix = require('laravel-mix');
-const tailwindcss = require('tailwindcss');
+const mix = require('laravel-mix')
+const tailwindcss = require('tailwindcss')
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -11,9 +12,21 @@ const tailwindcss = require('tailwindcss');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
+mix.webpackConfig({
+    resolve: {
+        alias: {
+            // JS Root
+            '@': path.resolve('resources/js'),
+            vue$: mix.inProduction() ? 'vue/dist/vue.min' : 'vue/dist/vue.js'
+        }
+    },
+    output:{
+        chunkFilename:'js/vuejs_code_split/[name].js',
+    }
+})
+    .js('resources/js/app.js', 'public/js')
     .sass('resources/sass/app.scss', 'public/css')
     .options({
         processCssUrls: false,
         postCss: [tailwindcss('./tailwind.config.js')],
-    });
+    })
