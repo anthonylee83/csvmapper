@@ -12,7 +12,7 @@
             <i class="fa fa-plus"></i>
             {{import_csv_text}}
         </vue-upload-component>
-        <button v-if="files.length > 0" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-5" @click.prevent="">{{upload_text}}</button>
+        <button @click="$refs.upload.active = true" v-if="files.length > 0" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-5">{{upload_text}}</button>
     </div>
     <div v-else-if="success === false">
         <form @submit.prevent="submit">
@@ -27,7 +27,7 @@
                 <tr v-for="(field, key) in contact_fields" :key="field">
                 <td class="border px-4 py-2">{{field}}</td>
                 <td class="border px-4 py-2">
-                    <select v-model="form[key]" :key="key" required>
+                    <select @change="form[key] = parseInt($event.target.value)" :key="key" required  class="shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline">
                         <option>Select Field</option>
                         <option :value="key" v-for="(header, key) in headers" :key="header" :selected="header === matchHeader(field)">{{header}}</option>
                     </select>
@@ -101,20 +101,26 @@ export default {
         },
         matchHeader(field)
         {
+            let fieldName = field.toLowerCase().replace(/\s/g, "_");
             // Do a check to see if there is an exact header match,if not
             // check to see if a name is similar
             let headerMatch = this.headers.find(header => {
                 return header == field;
             });
-            if(headerMatch && headerMatch.length == 1)
+            if(headerMatch && headerMatch.length == 1){
+                this.form[fieldName] = parseInt(Object.keys(this.headers).find(key => this.headers[key] === headerMatch));
                 return headerMatch;
+            }
 
             headerMatch = this.headers.find(header => {
                 return header.toLowerCase().includes(field.toLowerCase());
             });
-            if(headerMatch && headerMatch.length > 0)
-                return Array.isArray(headerMatch) ? headerMatch[0] : headerMatch;
-
+            if(headerMatch && headerMatch.length > 0){
+                headerMatch = Array.isArray(headerMatch) ? headerMatch[0] : headerMatch;
+                this.form[fieldName] = parseInt(Object.keys(this.headers).find(key => this.headers[key] === headerMatch));
+                return headerMatch;
+            }
+            this.form[fieldName] = null;
             return false;
         },
         submit(evt)

@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class Contact extends Model
 {
@@ -63,6 +64,7 @@ class Contact extends Model
                 $statement->execute($values);
             } catch(Exception $e)
             {
+                Log::warning($e);
                 array_push($errors, $contact);
             }
             $id = DB::getPdo()->lastInsertId();

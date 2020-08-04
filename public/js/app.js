@@ -2012,20 +2012,39 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     matchHeader: function matchHeader(field) {
-      // Do a check to see if there is an exact header match,if not
+      var _this = this;
+
+      var fieldName = field.toLowerCase().replace(/\s/g, "_"); // Do a check to see if there is an exact header match,if not
       // check to see if a name is similar
+
       var headerMatch = this.headers.find(function (header) {
         return header == field;
       });
-      if (headerMatch && headerMatch.length == 1) return headerMatch;
+
+      if (headerMatch && headerMatch.length == 1) {
+        this.form[fieldName] = parseInt(Object.keys(this.headers).find(function (key) {
+          return _this.headers[key] === headerMatch;
+        }));
+        return headerMatch;
+      }
+
       headerMatch = this.headers.find(function (header) {
         return header.toLowerCase().includes(field.toLowerCase());
       });
-      if (headerMatch && headerMatch.length > 0) return Array.isArray(headerMatch) ? headerMatch[0] : headerMatch;
+
+      if (headerMatch && headerMatch.length > 0) {
+        headerMatch = Array.isArray(headerMatch) ? headerMatch[0] : headerMatch;
+        this.form[fieldName] = parseInt(Object.keys(this.headers).find(function (key) {
+          return _this.headers[key] === headerMatch;
+        }));
+        return headerMatch;
+      }
+
+      this.form[fieldName] = null;
       return false;
     },
     submit: function submit(evt) {
-      var _this = this;
+      var _this2 = this;
 
       var data = {
         form: this.form,
@@ -2034,7 +2053,7 @@ __webpack_require__.r(__webpack_exports__);
       };
       axios.post('/contacts/import', data).then(function (response) {
         //Just putting a general success message, would probably use vue router in real app.
-        _this.success = true;
+        _this2.success = true;
       })["catch"](function (err) {//We would display an error message or take to another screen to correct issues
       });
     }
@@ -19734,7 +19753,7 @@ var render = function() {
                       "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-5",
                     on: {
                       click: function($event) {
-                        $event.preventDefault()
+                        _vm.$refs.upload.active = true
                       }
                     }
                   },
@@ -19772,33 +19791,13 @@ var render = function() {
                         _c(
                           "select",
                           {
-                            directives: [
-                              {
-                                name: "model",
-                                rawName: "v-model",
-                                value: _vm.form[key],
-                                expression: "form[key]"
-                              }
-                            ],
                             key: key,
+                            staticClass:
+                              "shadow appearance-none border border-red-500 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline",
                             attrs: { required: "" },
                             on: {
                               change: function($event) {
-                                var $$selectedVal = Array.prototype.filter
-                                  .call($event.target.options, function(o) {
-                                    return o.selected
-                                  })
-                                  .map(function(o) {
-                                    var val = "_value" in o ? o._value : o.value
-                                    return val
-                                  })
-                                _vm.$set(
-                                  _vm.form,
-                                  key,
-                                  $event.target.multiple
-                                    ? $$selectedVal
-                                    : $$selectedVal[0]
-                                )
+                                _vm.form[key] = parseInt($event.target.value)
                               }
                             }
                           },
