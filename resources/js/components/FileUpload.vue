@@ -1,7 +1,7 @@
 <template>
 <div class="import-contacts">
-    <div class="file-uploader flex justify-center" v-if="tempCode === null && success === false">
-        <vue-upload-component class="bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+    <div class="file-uploader flex justify-center flex-col" v-if="tempCode === null && success === false">
+        <vue-upload-component class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
             :post-action="post_url"
             :extensions="extensions"
             :accept="mime_types"
@@ -12,7 +12,7 @@
             <i class="fa fa-plus"></i>
             {{import_csv_text}}
         </vue-upload-component>
-        <button v-if="files.length > 0" class="btn btn-blue" @click.prevent="$refs.upload.active = true">{{upload_text}}</button>
+        <button v-if="files.length > 0" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-5" @click.prevent="">{{upload_text}}</button>
     </div>
     <div v-else-if="success === false">
         <form @submit.prevent="submit">

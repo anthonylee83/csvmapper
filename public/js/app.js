@@ -19695,14 +19695,14 @@ var render = function() {
     _vm.tempCode === null && _vm.success === false
       ? _c(
           "div",
-          { staticClass: "file-uploader flex justify-center" },
+          { staticClass: "file-uploader flex justify-center flex-col" },
           [
             _c(
               "vue-upload-component",
               {
                 ref: "upload",
                 staticClass:
-                  "bg-green-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded",
+                  "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded",
                 attrs: {
                   "post-action": _vm.post_url,
                   extensions: _vm.extensions,
@@ -19730,11 +19730,11 @@ var render = function() {
               ? _c(
                   "button",
                   {
-                    staticClass: "btn btn-blue",
+                    staticClass:
+                      "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-5",
                     on: {
                       click: function($event) {
                         $event.preventDefault()
-                        _vm.$refs.upload.active = true
                       }
                     }
                   },
